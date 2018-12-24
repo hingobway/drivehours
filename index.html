@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="shortcut icon" href="favicon.ico" />
+
+    <script src="https://vuejs.org/js/vue.min.js"></script>
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:400,900"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/main.css" />
+
+    <title>Driving Hours Calculator</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Driving Hours Calculator</h1>
+      <p>
+        This site will calculate your driving hours. Your logs must be in
+        <i>exactly</i> this format:
+      </p>
+      <pre><code>
+        M/D/YY Comment/Description
+        H:MMa-H:MMa
+        # hr|min
+        Night [if it was at night]
+        
+        8/11/18 Curvy Mountain Roads
+        12:41a-1:44p
+        1 hr
+      </code></pre>
+
+      <p class="info resp-disc">The totals are at the bottom of the page.</p>
+
+      <div v-show="noParse.length&&text!=''" class="red">
+        <h3>Failed to parse:</h3>
+        <p class="info">
+          The following entries could not be parsed, so they were ignored in the
+          tally. Check them again against the model above to make sure they
+          follow the syntax.
+        </p>
+        <ul>
+          <li v-for="entry in noParse" style="white-space: pre-line;">
+            <code>{{ entry }}</code>
+          </li>
+        </ul>
+      </div>
+
+      <div class="offsets">
+        <div class="info">
+          Use these boxes if you have any hours already tallied on paper that
+          you don't want to write in here.
+        </div>
+        <p>
+          <label for="offset">Untracked hours: </label>
+          <input type="number" class="offset" v-model.number="untracked" />
+        </p>
+        <p>
+          <label for="offset">Untracked night hours: </label>
+          <input type="number" class="offset" v-model.number="untrackedNight" />
+        </p>
+      </div>
+      <textarea id="inp" rows="50" v-model="text"></textarea>
+
+      <div class="calculated">
+        <h4>Calculated Hours</h4>
+        <p>Total: {{ totalStr }}</p>
+        <p>Night: {{ nightStr }}</p>
+        <p v-show="noParse.length&&text!=''" class="red">
+          Some entries failed to parse.
+          <span class="resp-disc">More information at the top.</span>
+        </p>
+      </div>
+    </div>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
