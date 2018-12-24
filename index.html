@@ -18,12 +18,13 @@
   </head>
   <body>
     <div id="app">
-      <h1>Driving Hours Calculator</h1>
-      <p>
-        This site will calculate your driving hours. Your logs must be in
-        <i>exactly</i> this format:
-      </p>
-      <pre><code>
+      <div id="cont">
+        <h1>Driving Hours Calculator</h1>
+        <p>
+          This site will calculate your driving hours. Your logs must be in
+          <i>exactly</i> this format:
+        </p>
+        <pre><code>
         M/D/YY Comment/Description
         H:MMa-H:MMa
         # hr|min
@@ -34,46 +35,61 @@
         1 hr
       </code></pre>
 
-      <p class="info resp-disc">The totals are at the bottom of the page.</p>
+        <p class="info resp-disc">The totals are at the bottom of the page.</p>
 
-      <div v-show="noParse.length&&text!=''" class="red">
-        <h3>Failed to parse:</h3>
-        <p class="info">
-          The following entries could not be parsed, so they were ignored in the
-          tally. Check them again against the model above to make sure they
-          follow the syntax.
-        </p>
-        <ul>
-          <li v-for="entry in noParse" style="white-space: pre-line;">
-            <code>{{ entry }}</code>
-          </li>
-        </ul>
-      </div>
-
-      <div class="offsets">
-        <div class="info">
-          Use these boxes if you have any hours already tallied on paper that
-          you don't want to write in here.
+        <div v-show="noParse.length&&text!=''" class="red cut">
+          <h3>Failed to parse:</h3>
+          <p class="info">
+            The following entries could not be parsed, so they were ignored in
+            the tally. Check them again against the model above to make sure
+            they follow the syntax.
+          </p>
+          <ul>
+            <li v-for="entry in noParse" style="white-space: pre-line;">
+              <code>{{ entry }}</code>
+            </li>
+          </ul>
         </div>
-        <p>
-          <label for="offset">Untracked hours: </label>
-          <input type="number" class="offset" v-model.number="untracked" />
-        </p>
-        <p>
-          <label for="offset">Untracked night hours: </label>
-          <input type="number" class="offset" v-model.number="untrackedNight" />
-        </p>
-      </div>
-      <textarea id="inp" rows="50" v-model="text"></textarea>
 
-      <div class="calculated">
-        <h4>Calculated Hours</h4>
-        <p>Total: {{ totalStr }}</p>
-        <p>Night: {{ nightStr }}</p>
-        <p v-show="noParse.length&&text!=''" class="red">
-          Some entries failed to parse.
-          <span class="resp-disc">More information at the top.</span>
-        </p>
+        <div class="offsets">
+          <div class="info">
+            Use these boxes if you have any hours already tallied on paper that
+            you don't want to write in here.
+          </div>
+          <p>
+            <label for="offset">Untracked hours: </label>
+            <input type="number" class="offset" v-model.number="untracked" />
+          </p>
+          <p>
+            <label for="offset">Untracked night hours: </label>
+            <input
+              type="number"
+              class="offset"
+              v-model.number="untrackedNight"
+            />
+          </p>
+        </div>
+        <textarea id="inp" rows="50" v-model="text"></textarea>
+
+        <div class="calculated">
+          <h4>Calculated Hours</h4>
+          <p>Total: {{ totalStr }}</p>
+          <p>Night: {{ nightStr }}</p>
+          <p v-show="noParse.length&&text!=''" class="red">
+            Some entries failed to parse.
+            <span class="resp-disc">More information at the top.</span>
+          </p>
+        </div>
+
+        <footer>
+          Created by hingobway,
+          <a
+            href="http://github.com/hingobway/drivehours"
+            target="_blank"
+            rel="noopener noreferrer"
+            >open source on Github</a
+          >.
+        </footer>
       </div>
     </div>
 
