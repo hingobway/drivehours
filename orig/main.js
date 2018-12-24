@@ -1,3 +1,42 @@
+function resize() {
+  const tallied = document.getElementsByClassName('calculated')[0];
+  tallied.style.right =
+    window.innerWidth > 1000 ? `${(window.innerWidth - 970) / 2}px` : '20px';
+}
+window.addEventListener('resize', resize, false);
+
+const tally = ({ text, night, untracked, notParsed }) => {
+  if (!notParsed) notParsed = [];
+  const times = text.split('\n\n');
+  let time = untracked || 0;
+
+  for (let i in times) {
+    const cur = times[i];
+    if (!night || (cur.split('\n')[3] && cur.split('\n')[3].match(/Night/i))) {
+      let t;
+      try {
+        t = cur.split('\n')[2].split(' ');
+      } catch (e) {
+        t = ['0', 'min'];
+        notParsed.push(cur);
+      }
+      const n = parseFloat(t[0]);
+      switch (t[1]) {
+        case 'min':
+          time += n / 60;
+          break;
+        case 'hr':
+          time += n;
+          break;
+        default:
+          notParsed.push(cur);
+      }
+    }
+  }
+
+  return time;
+};
+
 const app = new Vue({
   el: '#app',
   data: {
@@ -9,59 +48,18 @@ const app = new Vue({
   computed: {
     total() {
       this.noParse = [];
-      const times = this.text.split('\n\n');
-      let time = this.untracked || 0;
-
-      for (let i in times) {
-        const cur = times[i];
-        let t;
-        try {
-          t = cur.split('\n')[2].split(' ');
-        } catch (e) {
-          t = ['0', 'min'];
-          this.noParse.push(cur);
-        }
-        const n = parseFloat(t[0]);
-        switch (t[1]) {
-          case 'min':
-            time += n / 60;
-            break;
-          case 'hr':
-            time += n;
-            break;
-          default:
-            this.noParse.push(cur);
-        }
-      }
-
-      return time;
+      return tally({
+        text: this.text,
+        untracked: this.untracked,
+        notParsed: this.noParse
+      });
     },
     night() {
-      const times = this.text.split('\n\n');
-      let time = this.untrackedNight || 0;
-
-      for (let i in times) {
-        const cur = times[i];
-        if (cur.split('\n')[3] && cur.split('\n')[3].match(/Night/i)) {
-          let t;
-          try {
-            t = cur.split('\n')[2].split(' ');
-          } catch (e) {
-            t = ['0', 'min'];
-          }
-          const n = parseFloat(t[0]);
-          switch (t[1]) {
-            case 'min':
-              time += n / 60;
-              break;
-            case 'hr':
-              time += n;
-              break;
-          }
-        }
-      }
-
-      return time;
+      return tally({
+        text: this.text,
+        night: true,
+        untracked: this.untrackedNight
+      });
     },
     totalStr() {
       return this.total
@@ -73,5 +71,8 @@ const app = new Vue({
         ? `${Math.round(this.night * 100) / 100} hours`
         : 'None';
     }
+  },
+  mounted() {
+    resize();
   }
 });

@@ -1,4 +1,7 @@
 {
+  "name": "driving-hours",
+  "version": "1.0.0",
+  "description": "Website for calculating driving hours.",
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
@@ -10,5 +13,19 @@
     "last 1 version",
     "not dead",
     "> 0.2%"
-  ]
+  ],
+  "scripts": {
+    "dev": "gulp dev",
+    "build": "gulp prod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hingobway/drivehours.git"
+  },
+  "author": "hingobway",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hingobway/drivehours/issues"
+  },
+  "homepage": "https://github.com/hingobway/drivehours#readme"
 }
